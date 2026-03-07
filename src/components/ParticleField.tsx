@@ -1,9 +1,11 @@
-import { useRef, useMemo } from "react";
+import { useMemo, forwardRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { useRef } from "react";
 
-function Particles({ count = 800 }) {
-  const mesh = useRef<THREE.Points>(null);
+const Particles = forwardRef(function Particles(props: { count?: number }, _ref) {
+  const count = props.count ?? 800;
+  const mesh = useRef<THREE.Points>(null!);
 
   const [positions, colors] = useMemo(() => {
     const positions = new Float32Array(count * 3);
@@ -50,10 +52,10 @@ function Particles({ count = 800 }) {
       <pointsMaterial size={0.04} vertexColors transparent opacity={0.7} sizeAttenuation />
     </points>
   );
-}
+});
 
-function FloatingGlobe() {
-  const meshRef = useRef<THREE.Mesh>(null);
+const FloatingGlobe = forwardRef(function FloatingGlobe(_props, _ref) {
+  const meshRef = useRef<THREE.Mesh>(null!);
 
   useFrame((state) => {
     if (!meshRef.current) return;
@@ -67,7 +69,7 @@ function FloatingGlobe() {
       <meshBasicMaterial color="hsl(175, 80%, 50%)" wireframe transparent opacity={0.15} />
     </mesh>
   );
-}
+});
 
 export default function ParticleField() {
   return (
