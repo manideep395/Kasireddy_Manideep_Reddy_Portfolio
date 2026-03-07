@@ -14,7 +14,222 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      blogs: {
+        Row: {
+          content: string | null
+          cover_image: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          is_published: boolean | null
+          slug: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content?: string | null
+          cover_image?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          is_published?: boolean | null
+          slug: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string | null
+          cover_image?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          is_published?: boolean | null
+          slug?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      certifications: {
+        Row: {
+          created_at: string
+          credential_url: string | null
+          display_order: number | null
+          id: string
+          image_url: string | null
+          issue_date: string | null
+          issuer: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          credential_url?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          issue_date?: string | null
+          issuer: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          credential_url?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          issue_date?: string | null
+          issuer?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      contact_submissions: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          is_read: boolean | null
+          message: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      experiences: {
+        Row: {
+          company: string
+          created_at: string
+          description: string | null
+          display_order: number | null
+          duration: string
+          id: string
+          role: string
+          technologies: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          company: string
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          duration: string
+          id?: string
+          role: string
+          technologies?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          company?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          duration?: string
+          id?: string
+          role?: string
+          technologies?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          category: string
+          created_at: string
+          demo_url: string | null
+          description: string | null
+          display_order: number | null
+          github_url: string | null
+          id: string
+          image_url: string | null
+          is_featured: boolean | null
+          is_from_github: boolean | null
+          language: string
+          long_description: string | null
+          name: string
+          stars: number | null
+          tags: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          demo_url?: string | null
+          description?: string | null
+          display_order?: number | null
+          github_url?: string | null
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean | null
+          is_from_github?: boolean | null
+          language?: string
+          long_description?: string | null
+          name: string
+          stars?: number | null
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          demo_url?: string | null
+          description?: string | null
+          display_order?: number | null
+          github_url?: string | null
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean | null
+          is_from_github?: boolean | null
+          language?: string
+          long_description?: string | null
+          name?: string
+          stars?: number | null
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      skills: {
+        Row: {
+          category: string
+          display_order: number | null
+          id: string
+          level: number
+          name: string
+        }
+        Insert: {
+          category: string
+          display_order?: number | null
+          id?: string
+          level?: number
+          name: string
+        }
+        Update: {
+          category?: string
+          display_order?: number | null
+          id?: string
+          level?: number
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
