@@ -5,9 +5,12 @@ import AboutSection from "@/components/AboutSection";
 import SkillsSection from "@/components/SkillsSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import ExperienceSection from "@/components/ExperienceSection";
+import GithubStatsSection from "@/components/GithubStatsSection";
+import BlogSection from "@/components/BlogSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import ParticleField from "@/components/ParticleField";
+import AIChatbot from "@/components/AIChatbot";
 
 const Index = () => {
   return (
@@ -22,9 +25,12 @@ const Index = () => {
       <AboutSection />
       <SkillsSection />
       <ProjectsSection />
+      <GithubStatsSection />
       <ExperienceSection />
+      <BlogSection />
       <ContactSection />
       <Footer />
+      <AIChatbot />
     </div>
   );
 };
