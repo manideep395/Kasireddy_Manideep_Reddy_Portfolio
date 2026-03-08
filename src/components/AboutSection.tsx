@@ -45,7 +45,7 @@ function TiltCard({ children, className }: { children: React.ReactNode; classNam
 export default function AboutSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [experiences, setExperiences] = useState<Tables<"experiences">[]>([]);
 
   useEffect(() => {
     supabase.from("experiences").select("*").order("display_order").then(({ data }) => {
