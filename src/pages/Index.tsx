@@ -25,8 +25,12 @@ const Index = () => {
       <AboutSection />
       <SkillsSection />
       <ProjectsSection />
-      <GithubStatsSection />
-      <ExperienceSection />
+      <div className="-mt-6">
+        <GithubStatsSection />
+      </div>
+      <div className="-mt-6">
+        <ExperienceSection />
+      </div>
       <BlogSection />
       <ContactSection />
       <Footer />
