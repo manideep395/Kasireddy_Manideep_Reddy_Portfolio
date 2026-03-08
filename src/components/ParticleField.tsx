@@ -1,10 +1,10 @@
-import { useMemo, forwardRef, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { Float, MeshDistortMaterial, MeshWobbleMaterial } from "@react-three/drei";
+import { Text, Float, Line } from "@react-three/drei";
 
-const Particles = forwardRef(function Particles(props: { count?: number }, _ref) {
-  const count = props.count ?? 1200;
+// Floating particles
+function Particles({ count = 600 }) {
   const mesh = useRef<THREE.Points>(null!);
 
   const [positions, colors] = useMemo(() => {
@@ -15,9 +15,9 @@ const Particles = forwardRef(function Particles(props: { count?: number }, _ref)
     const pink = new THREE.Color("hsl(320, 70%, 55%)");
 
     for (let i = 0; i < count; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 25;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 25;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 25;
+      positions[i * 3] = (Math.random() - 0.5) * 30;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 30;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 20;
 
       const colorChoice = [cyan, purple, pink][Math.floor(Math.random() * 3)];
       colors[i * 3] = colorChoice.r;
@@ -29,8 +29,8 @@ const Particles = forwardRef(function Particles(props: { count?: number }, _ref)
 
   useFrame((state) => {
     if (!mesh.current) return;
-    mesh.current.rotation.x = state.clock.elapsedTime * 0.02;
-    mesh.current.rotation.y = state.clock.elapsedTime * 0.04;
+    mesh.current.rotation.x = state.clock.elapsedTime * 0.015;
+    mesh.current.rotation.y = state.clock.elapsedTime * 0.025;
   });
 
   return (
@@ -39,108 +39,177 @@ const Particles = forwardRef(function Particles(props: { count?: number }, _ref)
         <bufferAttribute attach="attributes-position" count={count} array={positions} itemSize={3} />
         <bufferAttribute attach="attributes-color" count={count} array={colors} itemSize={3} />
       </bufferGeometry>
-      <pointsMaterial size={0.035} vertexColors transparent opacity={0.6} sizeAttenuation />
+      <pointsMaterial size={0.04} vertexColors transparent opacity={0.5} sizeAttenuation />
     </points>
-  );
-});
-
-const FloatingGlobe = forwardRef(function FloatingGlobe(_props, _ref) {
-  const meshRef = useRef<THREE.Mesh>(null!);
-
-  useFrame((state) => {
-    if (!meshRef.current) return;
-    meshRef.current.rotation.y = state.clock.elapsedTime * 0.15;
-    meshRef.current.rotation.x = state.clock.elapsedTime * 0.08;
-    meshRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.4) * 0.4;
-  });
-
-  return (
-    <mesh ref={meshRef} position={[3.5, 0.5, -3]}>
-      <icosahedronGeometry args={[1.8, 1]} />
-      <meshBasicMaterial color="hsl(175, 80%, 50%)" wireframe transparent opacity={0.12} />
-    </mesh>
-  );
-});
-
-function FloatingTorusKnot() {
-  const meshRef = useRef<THREE.Mesh>(null!);
-
-  useFrame((state) => {
-    if (!meshRef.current) return;
-    meshRef.current.rotation.x = state.clock.elapsedTime * 0.1;
-    meshRef.current.rotation.z = state.clock.elapsedTime * 0.15;
-    meshRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.5;
-  });
-
-  return (
-    <mesh ref={meshRef} position={[-4, -1, -4]}>
-      <torusKnotGeometry args={[1.2, 0.3, 100, 16]} />
-      <meshBasicMaterial color="hsl(260, 60%, 60%)" wireframe transparent opacity={0.1} />
-    </mesh>
   );
 }
 
-function GlowOrb({ position, color, speed, size }: { position: [number, number, number]; color: string; speed: number; size: number }) {
-  const meshRef = useRef<THREE.Mesh>(null!);
+// Floating tech symbol
+function FloatingSymbol({
+  text,
+  position,
+  color,
+  speed,
+  size = 0.4,
+}: {
+  text: string;
+  position: [number, number, number];
+  color: string;
+  speed: number;
+  size?: number;
+}) {
+  const meshRef = useRef<THREE.Group>(null!);
 
   useFrame((state) => {
     if (!meshRef.current) return;
-    meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * speed) * 0.8;
-    meshRef.current.position.x = position[0] + Math.cos(state.clock.elapsedTime * speed * 0.7) * 0.5;
+    meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * speed) * 0.6;
+    meshRef.current.position.x = position[0] + Math.cos(state.clock.elapsedTime * speed * 0.5) * 0.3;
+    meshRef.current.rotation.z = Math.sin(state.clock.elapsedTime * speed * 0.3) * 0.15;
   });
 
   return (
-    <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-      <mesh ref={meshRef} position={position}>
-        <sphereGeometry args={[size, 32, 32]} />
-        <MeshDistortMaterial color={color} transparent opacity={0.15} distort={0.4} speed={2} />
-      </mesh>
+    <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.3}>
+      <group ref={meshRef} position={position}>
+        <Text
+          fontSize={size}
+          color={color}
+          anchorX="center"
+          anchorY="middle"
+          fillOpacity={0.2}
+          font="https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjPVmUsaaDhw.woff"
+        >
+          {text}
+        </Text>
+      </group>
     </Float>
   );
 }
 
-function WobbleRing({ position, color }: { position: [number, number, number]; color: string }) {
+// Wireframe code bracket shape
+function CodeBracket({ position, color }: { position: [number, number, number]; color: string }) {
   const meshRef = useRef<THREE.Mesh>(null!);
 
   useFrame((state) => {
     if (!meshRef.current) return;
-    meshRef.current.rotation.x = state.clock.elapsedTime * 0.12;
-    meshRef.current.rotation.y = state.clock.elapsedTime * 0.08;
+    meshRef.current.rotation.y = state.clock.elapsedTime * 0.1;
+    meshRef.current.rotation.z = state.clock.elapsedTime * 0.05;
+    meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.3) * 0.5;
   });
 
   return (
     <mesh ref={meshRef} position={position}>
-      <torusGeometry args={[1.5, 0.05, 16, 100]} />
-      <MeshWobbleMaterial color={color} transparent opacity={0.2} factor={0.3} speed={1.5} />
+      <torusGeometry args={[0.8, 0.03, 8, 4]} />
+      <meshBasicMaterial color={color} wireframe transparent opacity={0.15} />
     </mesh>
   );
 }
 
-function GridPlane() {
+// Neural network node cluster
+function NeuralNode({ position, color }: { position: [number, number, number]; color: string }) {
+  const groupRef = useRef<THREE.Group>(null!);
+
+  useFrame((state) => {
+    if (!groupRef.current) return;
+    groupRef.current.rotation.x = state.clock.elapsedTime * 0.08;
+    groupRef.current.rotation.y = state.clock.elapsedTime * 0.12;
+    groupRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.4) * 0.4;
+  });
+
+  const nodePositions: [number, number, number][] = useMemo(() => {
+    return Array.from({ length: 6 }, () => [
+      (Math.random() - 0.5) * 1.5,
+      (Math.random() - 0.5) * 1.5,
+      (Math.random() - 0.5) * 1.5,
+    ] as [number, number, number]);
+  }, []);
+
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -5, -5]}>
-      <planeGeometry args={[40, 40, 40, 40]} />
-      <meshBasicMaterial color="hsl(175, 80%, 50%)" wireframe transparent opacity={0.04} />
+    <group ref={groupRef} position={position}>
+      {nodePositions.map((pos, i) => (
+        <mesh key={i} position={pos}>
+          <sphereGeometry args={[0.06, 8, 8]} />
+          <meshBasicMaterial color={color} transparent opacity={0.25} />
+        </mesh>
+      ))}
+      {/* Connection lines */}
+      {nodePositions.slice(0, 4).map((pos, i) => {
+        const nextPos = nodePositions[(i + 1) % nodePositions.length];
+        return (
+          <Line
+            key={`line-${i}`}
+            points={[pos, nextPos]}
+            color={color}
+            transparent
+            opacity={0.1}
+            lineWidth={1}
+          />
+        );
+      })}
+    </group>
+  );
+}
+
+// Data flow line
+function DataStream({ position, color }: { position: [number, number, number]; color: string }) {
+  const meshRef = useRef<THREE.Mesh>(null!);
+
+  useFrame((state) => {
+    if (!meshRef.current) return;
+    meshRef.current.rotation.x = state.clock.elapsedTime * 0.2;
+    meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.5) * 0.3;
+  });
+
+  return (
+    <mesh ref={meshRef} position={position}>
+      <cylinderGeometry args={[0.02, 0.02, 3, 4]} />
+      <meshBasicMaterial color={color} transparent opacity={0.08} />
     </mesh>
   );
 }
+
+const CYAN = "hsl(175, 80%, 50%)";
+const PURPLE = "hsl(260, 60%, 60%)";
+const PINK = "hsl(320, 70%, 55%)";
+
+// Tech symbols to float
+const techSymbols = [
+  { text: "</>", position: [-5, 2, -4] as [number, number, number], color: CYAN, speed: 0.4, size: 0.5 },
+  { text: "{ }", position: [5, -1, -3] as [number, number, number], color: PURPLE, speed: 0.5, size: 0.45 },
+  { text: "AI", position: [-3, -2, -5] as [number, number, number], color: PINK, speed: 0.35, size: 0.6 },
+  { text: "def", position: [4, 3, -6] as [number, number, number], color: CYAN, speed: 0.45, size: 0.35 },
+  { text: ">>", position: [-6, 0, -4] as [number, number, number], color: PURPLE, speed: 0.3, size: 0.4 },
+  { text: "SQL", position: [3, -3, -5] as [number, number, number], color: CYAN, speed: 0.5, size: 0.35 },
+  { text: "λ", position: [-2, 3, -6] as [number, number, number], color: PINK, speed: 0.4, size: 0.5 },
+  { text: "API", position: [6, 1, -5] as [number, number, number], color: PURPLE, speed: 0.35, size: 0.35 },
+  { text: "0101", position: [-4, -3, -7] as [number, number, number], color: CYAN, speed: 0.45, size: 0.3 },
+  { text: "fn()", position: [2, 2, -4] as [number, number, number], color: PINK, speed: 0.5, size: 0.35 },
+];
 
 export default function ParticleField() {
   return (
     <div className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none">
       <Canvas camera={{ position: [0, 0, 7], fov: 60 }} style={{ background: "transparent", width: "100%", height: "100%" }}>
         <Particles />
-        <FloatingGlobe />
-        <FloatingTorusKnot />
-        <GlowOrb position={[-3, 2, -2]} color="hsl(175, 80%, 50%)" speed={0.5} size={0.6} />
-        <GlowOrb position={[4, -2, -3]} color="hsl(260, 60%, 60%)" speed={0.7} size={0.8} />
-        <GlowOrb position={[0, 3, -5]} color="hsl(320, 70%, 55%)" speed={0.4} size={0.5} />
-        <WobbleRing position={[-2, 1, -6]} color="hsl(175, 80%, 50%)" />
-        <WobbleRing position={[3, -1, -5]} color="hsl(260, 60%, 60%)" />
-        <GridPlane />
-        <ambientLight intensity={0.5} />
-        <pointLight position={[5, 5, 5]} intensity={0.3} color="hsl(175, 80%, 50%)" />
-        <pointLight position={[-5, -3, 3]} intensity={0.2} color="hsl(260, 60%, 60%)" />
+
+        {/* Floating tech symbols */}
+        {techSymbols.map((sym, i) => (
+          <FloatingSymbol key={i} {...sym} />
+        ))}
+
+        {/* Neural network clusters */}
+        <NeuralNode position={[-4, 1, -5]} color={CYAN} />
+        <NeuralNode position={[4, -2, -6]} color={PURPLE} />
+
+        {/* Code brackets */}
+        <CodeBracket position={[5, 2, -4]} color={CYAN} />
+        <CodeBracket position={[-5, -2, -5]} color={PURPLE} />
+
+        {/* Data streams */}
+        <DataStream position={[-6, 0, -7]} color={CYAN} />
+        <DataStream position={[6, 0, -7]} color={PURPLE} />
+        <DataStream position={[0, -3, -8]} color={PINK} />
+
+        <ambientLight intensity={0.3} />
       </Canvas>
     </div>
   );
