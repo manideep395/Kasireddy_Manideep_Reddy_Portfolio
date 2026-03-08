@@ -9,18 +9,54 @@ interface GithubStats {
   stats: { totalRepos: number; totalStars: number; languages: { name: string; count: number; percentage: number }[] };
 }
 
+const FALLBACK_GITHUB_STATS: GithubStats = {
+  user: {
+    name: "Manideep",
+    avatar_url: "",
+    bio: "Developer",
+    public_repos: 0,
+    followers: 0,
+    following: 0,
+  },
+  stats: {
+    totalRepos: 0,
+    totalStars: 0,
+    languages: [],
+  },
+};
+
 export default function GithubStatsSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [data, setData] = useState<GithubStats | null>(null);
+  const [data, setData] = useState<GithubStats>(FALLBACK_GITHUB_STATS);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    supabase.functions.invoke("github-data").then(({ data: d }) => {
-      if (d) setData(d);
-    });
+    let isMounted = true;
+
+    const loadGithubStats = async () => {
+      try {
+        const { data: d, error } = await supabase.functions.invoke("github-data");
+        if (error) throw error;
+
+        if (isMounted && d?.stats) {
+          setData(d as GithubStats);
+        }
+      } catch (error) {
+        console.error("Failed to load GitHub stats:", error);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+
+    loadGithubStats();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  if (!data) return (
+  if (isLoading) return (
     <section id="github" className="px-6 pt-2 pb-4 md:px-12 md:pt-2 md:pb-4 lg:px-24">
       <div className="max-w-6xl mx-auto text-center py-8">
         <p className="text-muted-foreground text-sm">Loading GitHub stats...</p>
