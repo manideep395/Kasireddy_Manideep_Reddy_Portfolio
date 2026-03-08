@@ -20,7 +20,13 @@ export default function GithubStatsSection() {
     });
   }, []);
 
-  if (!data) return <div className="h-0" />;
+  if (!data) return (
+    <section id="github" className="px-6 pt-2 pb-4 md:px-12 md:pt-2 md:pb-4 lg:px-24">
+      <div className="max-w-6xl mx-auto text-center py-8">
+        <p className="text-muted-foreground text-sm">Loading GitHub stats...</p>
+      </div>
+    </section>
+  );
 
   const stats = [
     { icon: BookOpen, label: "Repositories", value: data.stats.totalRepos },
