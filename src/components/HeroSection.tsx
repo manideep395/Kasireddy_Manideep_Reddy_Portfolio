@@ -59,12 +59,16 @@ export default function HeroSection() {
             <a href="#projects" className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">
               View Projects
             </a>
+            <a href="https://drive.google.com/uc?export=download&id=1zAgpoC17EI6hJm1Dw-Fi5eTNFo_IbWo4" target="_blank" rel="noopener noreferrer"
+              className="px-6 py-3 rounded-lg glass text-foreground font-semibold hover:border-primary/50 transition-colors flex items-center gap-2">
+              <FileText size={18} /> Download Resume
+            </a>
             <a href="https://github.com/manideep395" target="_blank" rel="noopener noreferrer"
               className="px-6 py-3 rounded-lg glass text-foreground font-semibold hover:border-primary/50 transition-colors flex items-center gap-2">
-              <Github size={18} /> Explore GitHub
+              <Github size={18} /> GitHub
             </a>
             <a href="#contact" className="px-6 py-3 rounded-lg glass text-foreground font-semibold hover:border-primary/50 transition-colors flex items-center gap-2">
-              <Mail size={18} /> Contact Me
+              <Mail size={18} /> Contact
             </a>
           </div>
         </motion.div>
