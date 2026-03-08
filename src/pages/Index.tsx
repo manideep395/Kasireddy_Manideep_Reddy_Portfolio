@@ -15,13 +15,11 @@ import AIChatbot from "@/components/AIChatbot";
 const Index = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-x-hidden">
+      <Suspense fallback={null}>
+        <ParticleField />
+      </Suspense>
       <Navigation />
-      <div className="relative">
-        <Suspense fallback={null}>
-          <ParticleField />
-        </Suspense>
-        <HeroSection />
-      </div>
+      <HeroSection />
       <AboutSection />
       <SkillsSection />
       <ProjectsSection />

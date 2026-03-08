@@ -127,7 +127,7 @@ function GridPlane() {
 
 export default function ParticleField() {
   return (
-    <div className="absolute inset-0 -z-10">
+    <div className="fixed inset-0 -z-10 pointer-events-none">
       <Canvas camera={{ position: [0, 0, 7], fov: 60 }} style={{ background: "transparent" }}>
         <Particles />
         <FloatingGlobe />
