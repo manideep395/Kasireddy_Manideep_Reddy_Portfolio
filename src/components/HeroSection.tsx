@@ -45,7 +45,7 @@ export default function HeroSection() {
           className="flex-1 text-center md:text-left"
         >
           <p className="text-sm font-mono text-primary mb-4 tracking-widest uppercase">
-            Welcome to my portfolio
+            Welcome to my portfolio its me
           </p>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
             <span className="text-foreground">Kasireddy</span>{" "}
