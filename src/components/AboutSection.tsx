@@ -7,7 +7,6 @@ const timeline = [
   { year: "2021", title: "Started B.Tech at Vasavi College of Engineering", type: "education" },
   { year: "2023", title: "Python Developer Intern at Codec Technologies", type: "work" },
   { year: "2023", title: "Java Developer Intern at Codec Technologies", type: "work" },
-  { year: "2024", title: "Deloitte Data Analytics Virtual Internship", type: "work" },
   { year: "2024", title: "Built AI-Powered Projects & Hackathon Participation", type: "project" },
 ];
 
