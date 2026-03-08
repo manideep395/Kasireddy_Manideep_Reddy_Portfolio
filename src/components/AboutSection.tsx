@@ -106,20 +106,30 @@ export default function AboutSection() {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <div className="relative pl-6 border-l border-border">
+              {staticTimeline[0] && (
+                <motion.div initial={{ opacity: 0, x: 20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.5 }} className="mb-6 relative">
+                  <div className="absolute -left-[calc(0.75rem+1.5px)] top-1 w-3 h-3 rounded-full bg-primary" />
+                  <span className="text-xs font-mono text-primary">{staticTimeline[0].year}</span>
+                  <p className="text-foreground text-sm mt-1 font-medium">{staticTimeline[0].title}</p>
+                  <p className="text-muted-foreground text-xs">{staticTimeline[0].subtitle}</p>
+                </motion.div>
+              )}
               {experiences.map((exp, i) => (
-                <motion.div
-                  key={exp.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.5 + i * 0.1 }}
-                  className="mb-6 last:mb-0 relative"
-                >
+                <motion.div key={exp.id} initial={{ opacity: 0, x: 20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.6 + i * 0.1 }} className="mb-6 relative">
                   <div className="absolute -left-[calc(0.75rem+1.5px)] top-1 w-3 h-3 rounded-full bg-primary" />
                   <span className="text-xs font-mono text-primary">{exp.duration}</span>
                   <p className="text-foreground text-sm mt-1 font-medium">{exp.role}</p>
                   <p className="text-muted-foreground text-xs">{exp.company}</p>
                 </motion.div>
               ))}
+              {staticTimeline[1] && (
+                <motion.div initial={{ opacity: 0, x: 20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.7 + experiences.length * 0.1 }} className="mb-0 relative">
+                  <div className="absolute -left-[calc(0.75rem+1.5px)] top-1 w-3 h-3 rounded-full bg-primary" />
+                  <span className="text-xs font-mono text-primary">{staticTimeline[1].year}</span>
+                  <p className="text-foreground text-sm mt-1 font-medium">{staticTimeline[1].title}</p>
+                  <p className="text-muted-foreground text-xs">{staticTimeline[1].subtitle}</p>
+                </motion.div>
+              )}
             </div>
           </motion.div>
         </div>
