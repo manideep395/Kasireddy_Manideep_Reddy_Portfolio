@@ -114,7 +114,7 @@ function NeuralCluster({ position, color }: { position: [number, number, number]
       {nodePositions.map((p, i) => (
         <mesh key={i} position={p}>
           <sphereGeometry args={[0.07, 12, 12]} />
-          <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.5} transparent opacity={0.8} />
+          <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.3} transparent opacity={0.5} />
         </mesh>
       ))}
 
