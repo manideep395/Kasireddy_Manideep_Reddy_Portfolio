@@ -134,12 +134,15 @@ function NeuralNode({ position, color }: { position: [number, number, number]; c
       {/* Connection lines */}
       {nodePositions.slice(0, 4).map((pos, i) => {
         const nextPos = nodePositions[(i + 1) % nodePositions.length];
-        const points = [new THREE.Vector3(...pos), new THREE.Vector3(...nextPos)];
-        const geometry = new THREE.BufferGeometry().setFromPoints(points);
         return (
-          <line key={`line-${i}`} geometry={geometry}>
-            <lineBasicMaterial color={color} transparent opacity={0.1} />
-          </line>
+          <Line
+            key={`line-${i}`}
+            points={[pos, nextPos]}
+            color={color}
+            transparent
+            opacity={0.1}
+            lineWidth={1}
+          />
         );
       })}
     </group>
