@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { LogOut, FolderOpen, FileText, Award, Briefcase, Mail, BarChart3, Wrench, Github } from "lucide-react";
+import { LogOut, FolderOpen, FileText, Award, Briefcase, Mail, Wrench, Settings } from "lucide-react";
 import AdminProjects from "@/components/admin/AdminProjects";
 import AdminBlogs from "@/components/admin/AdminBlogs";
 import AdminExperiences from "@/components/admin/AdminExperiences";
@@ -17,7 +17,52 @@ const tabs = [
   { id: "certifications", label: "Certifications", icon: Award },
   { id: "skills", label: "Skills", icon: Wrench },
   { id: "contacts", label: "Messages", icon: Mail },
+  { id: "settings", label: "Settings", icon: Settings },
 ];
+
+function AdminSettings() {
+  const [resumeUrl, setResumeUrl] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    supabase.from("site_settings").select("value").eq("key", "resume_url").single().then(({ data }) => {
+      if (data?.value) setResumeUrl(data.value);
+    });
+  }, []);
+
+  const handleSave = async () => {
+    setSaving(true);
+    const { error } = await supabase.from("site_settings").update({ value: resumeUrl, updated_at: new Date().toISOString() }).eq("key", "resume_url");
+    if (error) {
+      // Try insert if no row exists
+      await supabase.from("site_settings").insert({ key: "resume_url", value: resumeUrl });
+    }
+    toast.success("Resume URL updated!");
+    setSaving(false);
+  };
+
+  return (
+    <div>
+      <h2 className="text-xl font-bold text-foreground mb-6">Site Settings</h2>
+      <div className="glass-card rounded-xl p-6 max-w-2xl space-y-4">
+        <div>
+          <label className="text-sm text-muted-foreground mb-1 block">Resume URL (Google Drive, Dropbox, etc.)</label>
+          <input
+            type="url"
+            value={resumeUrl}
+            onChange={(e) => setResumeUrl(e.target.value)}
+            placeholder="https://drive.google.com/..."
+            className="w-full px-4 py-3 rounded-lg bg-muted text-foreground text-sm border border-border focus:border-primary focus:outline-none"
+          />
+        </div>
+        <button onClick={handleSave} disabled={saving}
+          className="px-6 py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 disabled:opacity-50">
+          {saving ? "Saving..." : "Save Settings"}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("projects");
@@ -27,11 +72,8 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (!session) {
-        navigate("/admin/login");
-      } else {
-        setUser(session.user);
-      }
+      if (!session) navigate("/admin/login");
+      else setUser(session.user);
       setLoading(false);
     });
 
@@ -83,6 +125,7 @@ export default function AdminDashboard() {
           {activeTab === "certifications" && <AdminCertifications />}
           {activeTab === "skills" && <AdminSkills />}
           {activeTab === "contacts" && <AdminContacts />}
+          {activeTab === "settings" && <AdminSettings />}
         </main>
       </div>
     </div>
