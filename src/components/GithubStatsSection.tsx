@@ -30,7 +30,7 @@ export default function GithubStatsSection() {
   ];
 
   return (
-    <section id="github" className="px-6 py-6 md:px-12 md:py-8 lg:px-24" ref={ref}>
+    <section id="github" className="px-6 pt-2 pb-4 md:px-12 md:pt-2 md:pb-4 lg:px-24" ref={ref}>
       <div className="max-w-6xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6 }}>
           <h2 className="text-3xl md:text-4xl font-bold mb-2">
