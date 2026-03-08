@@ -10,59 +10,32 @@ interface GithubStats {
 }
 
 const FALLBACK_GITHUB_STATS: GithubStats = {
-  user: {
-    name: "Manideep",
-    avatar_url: "",
-    bio: "Developer",
-    public_repos: 0,
-    followers: 0,
-    following: 0,
-  },
-  stats: {
-    totalRepos: 0,
-    totalStars: 0,
-    languages: [],
-  },
+  user: { name: "Manideep", avatar_url: "", bio: "Developer", public_repos: 0, followers: 0, following: 0 },
+  stats: { totalRepos: 0, totalStars: 0, languages: [] },
 };
 
 export default function GithubStatsSection() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
   const [data, setData] = useState<GithubStats>(FALLBACK_GITHUB_STATS);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
-
     const loadGithubStats = async () => {
       try {
         const { data: d, error } = await supabase.functions.invoke("github-data");
         if (error) throw error;
-
-        if (isMounted && d?.stats) {
-          setData(d as GithubStats);
-        }
+        if (isMounted && d?.stats) setData(d as GithubStats);
       } catch (error) {
         console.error("Failed to load GitHub stats:", error);
       } finally {
         if (isMounted) setIsLoading(false);
       }
     };
-
     loadGithubStats();
-
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, []);
-
-  if (isLoading) return (
-    <section id="github" className="px-6 pt-2 pb-4 md:px-12 md:pt-2 md:pb-4 lg:px-24">
-      <div className="max-w-6xl mx-auto text-center py-8">
-        <p className="text-muted-foreground text-sm">Loading GitHub stats...</p>
-      </div>
-    </section>
-  );
 
   const stats = [
     { icon: BookOpen, label: "Repositories", value: data.stats.totalRepos },
@@ -81,49 +54,57 @@ export default function GithubStatsSection() {
           <div className="w-20 h-1 bg-primary rounded mb-10" />
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          {stats.map((s, i) => (
+        {isLoading ? (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground text-sm animate-pulse">Loading GitHub stats...</p>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+              {stats.map((s, i) => (
+                <motion.div
+                  key={s.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.2 + i * 0.1 }}
+                  className="glass-card rounded-xl p-5 text-center"
+                >
+                  <s.icon className="mx-auto text-primary mb-2" size={24} />
+                  <p className="text-2xl font-bold text-foreground">{s.value}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{s.label}</p>
+                </motion.div>
+              ))}
+            </div>
+
             <motion.div
-              key={s.label}
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.2 + i * 0.1 }}
-              className="glass-card rounded-xl p-5 text-center"
+              transition={{ delay: 0.5 }}
+              className="glass-card rounded-xl p-6"
             >
-              <s.icon className="mx-auto text-primary mb-2" size={24} />
-              <p className="text-2xl font-bold text-foreground">{s.value}</p>
-              <p className="text-xs text-muted-foreground mt-1">{s.label}</p>
-            </motion.div>
-          ))}
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.5 }}
-          className="glass-card rounded-xl p-6"
-        >
-          <h3 className="text-lg font-semibold text-foreground mb-4">Top Languages</h3>
-          <div className="space-y-3">
-            {data.stats.languages.slice(0, 6).map((lang, i) => (
-              <div key={lang.name}>
-                <div className="flex justify-between mb-1">
-                  <span className="text-sm text-muted-foreground">{lang.name}</span>
-                  <span className="text-xs font-mono text-primary">{lang.percentage}%</span>
-                </div>
-                <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={isInView ? { width: `${lang.percentage}%` } : {}}
-                    transition={{ duration: 1, delay: 0.6 + i * 0.05 }}
-                    className="h-full rounded-full"
-                    style={{ background: `linear-gradient(90deg, hsl(175 80% 50%), hsl(260 60% 60%))` }}
-                  />
-                </div>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Top Languages</h3>
+              <div className="space-y-3">
+                {data.stats.languages.slice(0, 6).map((lang, i) => (
+                  <div key={lang.name}>
+                    <div className="flex justify-between mb-1">
+                      <span className="text-sm text-muted-foreground">{lang.name}</span>
+                      <span className="text-xs font-mono text-primary">{lang.percentage}%</span>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={isInView ? { width: `${lang.percentage}%` } : {}}
+                        transition={{ duration: 1, delay: 0.6 + i * 0.05 }}
+                        className="h-full rounded-full"
+                        style={{ background: `linear-gradient(90deg, hsl(175 80% 50%), hsl(260 60% 60%))` }}
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </motion.div>
+            </motion.div>
+          </>
+        )}
       </div>
     </section>
   );
