@@ -58,8 +58,8 @@ export default function HeroSection() {
             </span>
           </div>
           <p className="text-muted-foreground text-lg md:text-xl max-w-xl mb-10 leading-relaxed">
-            I build intelligent systems, AI tools, and scalable applications
-            that solve real-world problems.
+            I design AI-powered systems, developer tools, and scalable web applications
+            that solve real-world problems using modern technologies.
           </p>
 
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
