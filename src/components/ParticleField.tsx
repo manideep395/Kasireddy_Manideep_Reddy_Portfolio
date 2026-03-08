@@ -41,7 +41,7 @@ function Particles({ count = 900 }) {
         <bufferAttribute attach="attributes-position" count={count} array={positions} itemSize={3} />
         <bufferAttribute attach="attributes-color" count={count} array={colors} itemSize={3} />
       </bufferGeometry>
-      <pointsMaterial size={0.055} vertexColors transparent opacity={0.9} sizeAttenuation />
+      <pointsMaterial size={0.04} vertexColors transparent opacity={0.6} sizeAttenuation />
     </points>
   );
 }
@@ -60,12 +60,12 @@ function FloatingChip({ position, color }: { position: [number, number, number];
     <Float speed={2} rotationIntensity={0.35} floatIntensity={0.45}>
       <group ref={groupRef} position={position}>
         <mesh>
-          <boxGeometry args={[0.9, 0.12, 0.9]} />
-          <meshStandardMaterial color={color} transparent opacity={0.22} emissive={color} emissiveIntensity={0.25} />
+          <boxGeometry args={[0.8, 0.1, 0.8]} />
+          <meshStandardMaterial color={color} transparent opacity={0.12} emissive={color} emissiveIntensity={0.15} />
         </mesh>
-        <mesh position={[0, 0.08, 0]}>
-          <boxGeometry args={[0.45, 0.05, 0.45]} />
-          <meshStandardMaterial color={color} transparent opacity={0.45} emissive={color} emissiveIntensity={0.5} />
+        <mesh position={[0, 0.07, 0]}>
+          <boxGeometry args={[0.35, 0.04, 0.35]} />
+          <meshStandardMaterial color={color} transparent opacity={0.25} emissive={color} emissiveIntensity={0.3} />
         </mesh>
       </group>
     </Float>
@@ -83,9 +83,9 @@ function FloatingCodeBrackets({ position, color }: { position: [number, number, 
 
   return (
     <group ref={groupRef} position={position}>
-      <Line points={[[-0.7, 0.45, 0], [-1, 0, 0], [-0.7, -0.45, 0]]} color={color} lineWidth={2} transparent opacity={0.8} />
-      <Line points={[[0.7, 0.45, 0], [1, 0, 0], [0.7, -0.45, 0]]} color={color} lineWidth={2} transparent opacity={0.8} />
-      <Line points={[[-0.12, -0.55, 0], [0.12, 0.55, 0]]} color={color} lineWidth={2} transparent opacity={0.55} />
+      <Line points={[[-0.6, 0.4, 0], [-0.85, 0, 0], [-0.6, -0.4, 0]]} color={color} lineWidth={1.5} transparent opacity={0.45} />
+      <Line points={[[0.6, 0.4, 0], [0.85, 0, 0], [0.6, -0.4, 0]]} color={color} lineWidth={1.5} transparent opacity={0.45} />
+      <Line points={[[-0.1, -0.45, 0], [0.1, 0.45, 0]]} color={color} lineWidth={1.5} transparent opacity={0.3} />
     </group>
   );
 }
@@ -114,11 +114,11 @@ function NeuralCluster({ position, color }: { position: [number, number, number]
       {nodePositions.map((p, i) => (
         <mesh key={i} position={p}>
           <sphereGeometry args={[0.07, 12, 12]} />
-          <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.5} transparent opacity={0.8} />
+          <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.3} transparent opacity={0.5} />
         </mesh>
       ))}
 
-      <Line points={[nodePositions[0], nodePositions[1], nodePositions[2], nodePositions[4], nodePositions[3], nodePositions[0]]} color={color} transparent opacity={0.35} lineWidth={1.5} />
+      <Line points={[nodePositions[0], nodePositions[1], nodePositions[2], nodePositions[4], nodePositions[3], nodePositions[0]]} color={color} transparent opacity={0.2} lineWidth={1} />
     </group>
   );
 }
@@ -126,7 +126,7 @@ function NeuralCluster({ position, color }: { position: [number, number, number]
 export default function ParticleField() {
   return (
     <div className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none">
-      <div className="absolute inset-0 opacity-40" style={{ background: "radial-gradient(circle at 50% 30%, hsl(var(--primary) / 0.18), transparent 55%)" }} />
+      <div className="absolute inset-0 opacity-25" style={{ background: "radial-gradient(circle at 50% 30%, hsl(var(--primary) / 0.12), transparent 55%)" }} />
 
       <Canvas
         camera={{ position: [0, 0, 8], fov: 58 }}
