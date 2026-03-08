@@ -118,7 +118,7 @@ function NeuralCluster({ position, color }: { position: [number, number, number]
         </mesh>
       ))}
 
-      <Line points={[nodePositions[0], nodePositions[1], nodePositions[2], nodePositions[4], nodePositions[3], nodePositions[0]]} color={color} transparent opacity={0.35} lineWidth={1.5} />
+      <Line points={[nodePositions[0], nodePositions[1], nodePositions[2], nodePositions[4], nodePositions[3], nodePositions[0]]} color={color} transparent opacity={0.2} lineWidth={1} />
     </group>
   );
 }
