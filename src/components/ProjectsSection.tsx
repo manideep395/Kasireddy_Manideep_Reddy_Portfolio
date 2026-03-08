@@ -147,10 +147,21 @@ export default function ProjectsSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   useEffect(() => {
-    supabase.functions.invoke("github-data").then(({ data }) => {
-      if (data?.repos) setRepos(data.repos);
+    const fetchWithRetry = async (attempts = 3) => {
+      for (let i = 0; i < attempts; i++) {
+        try {
+          const { data } = await supabase.functions.invoke("github-data");
+          if (data?.repos && data.repos.length > 0) {
+            setRepos(data.repos);
+            setLoading(false);
+            return;
+          }
+        } catch {}
+        if (i < attempts - 1) await new Promise(r => setTimeout(r, 1500));
+      }
       setLoading(false);
-    }).catch(() => setLoading(false));
+    };
+    fetchWithRetry();
   }, []);
 
   const languages = ["All", ...Array.from(new Set(repos.map(r => r.language).filter(Boolean))) as string[]];

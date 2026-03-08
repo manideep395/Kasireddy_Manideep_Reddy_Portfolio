@@ -22,18 +22,24 @@ export default function GithubStatsSection() {
 
   useEffect(() => {
     let isMounted = true;
-    const loadGithubStats = async () => {
-      try {
-        const { data: d, error } = await supabase.functions.invoke("github-data");
-        if (error) throw error;
-        if (isMounted && d?.stats) setData(d as GithubStats);
-      } catch (error) {
-        console.error("Failed to load GitHub stats:", error);
-      } finally {
-        if (isMounted) setIsLoading(false);
+    const fetchWithRetry = async (attempts = 3) => {
+      for (let i = 0; i < attempts; i++) {
+        try {
+          const { data: d, error } = await supabase.functions.invoke("github-data");
+          if (error) throw error;
+          if (isMounted && d?.stats && d.repos?.length > 0) {
+            setData(d as GithubStats);
+            setIsLoading(false);
+            return;
+          }
+        } catch (error) {
+          console.error("Failed to load GitHub stats:", error);
+        }
+        if (i < attempts - 1) await new Promise(r => setTimeout(r, 1500));
       }
+      if (isMounted) setIsLoading(false);
     };
-    loadGithubStats();
+    fetchWithRetry();
     return () => { isMounted = false; };
   }, []);
 
