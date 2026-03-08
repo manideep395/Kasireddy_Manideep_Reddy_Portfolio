@@ -126,7 +126,7 @@ function NeuralCluster({ position, color }: { position: [number, number, number]
 export default function ParticleField() {
   return (
     <div className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none">
-      <div className="absolute inset-0 opacity-40" style={{ background: "radial-gradient(circle at 50% 30%, hsl(var(--primary) / 0.18), transparent 55%)" }} />
+      <div className="absolute inset-0 opacity-25" style={{ background: "radial-gradient(circle at 50% 30%, hsl(var(--primary) / 0.12), transparent 55%)" }} />
 
       <Canvas
         camera={{ position: [0, 0, 8], fov: 58 }}
