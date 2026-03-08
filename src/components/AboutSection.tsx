@@ -64,33 +64,27 @@ export default function AboutSection() {
           <h2 className="text-3xl md:text-4xl font-bold mb-2">
             About <span className="gradient-text">Me</span>
           </h2>
-          <div className="w-20 h-1 bg-primary rounded mb-8" />
+          <div className="w-20 h-1 bg-primary rounded mb-10" />
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-10"
-        >
-          <p className="text-muted-foreground leading-relaxed mb-4 max-w-3xl">
-            I'm a <span className="text-foreground font-medium">B.Tech Computer Science student at Vasavi College of Engineering</span> with
-            a deep passion for building intelligent systems and practical software solutions.
-          </p>
-          <p className="text-muted-foreground leading-relaxed max-w-3xl">
-            From AI-driven tools to full-stack applications, I focus on creating technology
-            that improves productivity and solves real problems. I thrive in hackathons
-            and enjoy pushing boundaries with emerging technologies.
-          </p>
-        </motion.div>
-
-        <div className="grid md:grid-cols-2 gap-10">
-          {/* Interests */}
+        <div className="grid md:grid-cols-5 gap-10">
+          {/* Left column: Bio + Interests (3 cols) */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="md:col-span-3"
           >
+            <p className="text-muted-foreground leading-relaxed mb-4">
+              I'm a <span className="text-foreground font-medium">B.Tech Computer Science student at Vasavi College of Engineering</span> with
+              a deep passion for building intelligent systems and practical software solutions.
+            </p>
+            <p className="text-muted-foreground leading-relaxed mb-8">
+              From AI-driven tools to full-stack applications, I focus on creating technology
+              that improves productivity and solves real problems. I thrive in hackathons
+              and enjoy pushing boundaries with emerging technologies.
+            </p>
+
             <h3 className="text-lg font-semibold text-foreground mb-4">Interests & Focus</h3>
             <div className="grid grid-cols-2 gap-4" style={{ perspective: "800px" }}>
               {interests.map((item, i) => (
@@ -109,39 +103,40 @@ export default function AboutSection() {
             </div>
           </motion.div>
 
-          {/* Timeline */}
+          {/* Right column: Timeline (2 cols) */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
+            className="md:col-span-2"
           >
             <h3 className="text-lg font-semibold text-foreground mb-4">Journey</h3>
-            <div className="relative pl-6 border-l border-border">
+            <div className="relative pl-6 border-l-2 border-primary/30">
               {staticTimeline[0] && (
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.5 }} className="mb-6 relative">
-                  <div className="absolute -left-[calc(0.75rem+1.5px)] top-1 w-3 h-3 rounded-full bg-primary" />
+                <motion.div initial={{ opacity: 0, x: 20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.5 }} className="mb-8 relative">
+                  <div className="absolute -left-[calc(0.75rem+2px)] top-1 w-3 h-3 rounded-full bg-primary shadow-[0_0_8px_hsl(175_80%_50%/0.5)]" />
                   <span className="text-xs font-mono text-primary">{staticTimeline[0].year}</span>
                   <p className="text-foreground text-sm mt-1 font-medium">{staticTimeline[0].title}</p>
-                  <p className="text-muted-foreground text-xs">{staticTimeline[0].subtitle}</p>
+                  <p className="text-muted-foreground text-xs mt-0.5">{staticTimeline[0].subtitle}</p>
                 </motion.div>
               )}
               {experiences.map((exp, i) => (
-                <motion.div key={exp.id} initial={{ opacity: 0, x: 20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.6 + i * 0.1 }} className="mb-6 relative">
-                  <div className="absolute -left-[calc(0.75rem+1.5px)] top-1 w-3 h-3 rounded-full bg-primary" />
+                <motion.div key={exp.id} initial={{ opacity: 0, x: 20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.6 + i * 0.1 }} className="mb-8 relative">
+                  <div className="absolute -left-[calc(0.75rem+2px)] top-1 w-3 h-3 rounded-full bg-primary shadow-[0_0_8px_hsl(175_80%_50%/0.5)]" />
                   <span className="text-xs font-mono text-primary">{exp.duration}</span>
                   <p className="text-foreground text-sm mt-1 font-medium">{exp.role}</p>
-                  <p className="text-muted-foreground text-xs">{exp.company}</p>
+                  <p className="text-muted-foreground text-xs mt-0.5">{exp.company}</p>
                   {exp.description && (
-                    <p className="text-muted-foreground text-xs mt-1 leading-relaxed">{exp.description}</p>
+                    <p className="text-muted-foreground text-xs mt-1.5 leading-relaxed">{exp.description}</p>
                   )}
                 </motion.div>
               ))}
               {staticTimeline[1] && (
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.7 + experiences.length * 0.1 }} className="mb-0 relative">
-                  <div className="absolute -left-[calc(0.75rem+1.5px)] top-1 w-3 h-3 rounded-full bg-primary" />
+                <motion.div initial={{ opacity: 0, x: 20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.7 + experiences.length * 0.1 }} className="relative">
+                  <div className="absolute -left-[calc(0.75rem+2px)] top-1 w-3 h-3 rounded-full bg-primary shadow-[0_0_8px_hsl(175_80%_50%/0.5)]" />
                   <span className="text-xs font-mono text-primary">{staticTimeline[1].year}</span>
                   <p className="text-foreground text-sm mt-1 font-medium">{staticTimeline[1].title}</p>
-                  <p className="text-muted-foreground text-xs">{staticTimeline[1].subtitle}</p>
+                  <p className="text-muted-foreground text-xs mt-0.5">{staticTimeline[1].subtitle}</p>
                 </motion.div>
               )}
             </div>
