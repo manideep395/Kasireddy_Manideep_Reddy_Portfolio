@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Brain, Code, Database, Lightbulb } from "lucide-react";
@@ -18,6 +18,31 @@ const interests = [
   { icon: Lightbulb, label: "Problem Solving" },
 ];
 
+function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [5, -5]), { stiffness: 200, damping: 20 });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-5, 5]), { stiffness: 200, damping: 20 });
+
+  return (
+    <motion.div
+      ref={ref}
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      onMouseMove={(e) => {
+        if (!ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        mouseX.set((e.clientX - rect.left) / rect.width - 0.5);
+        mouseY.set((e.clientY - rect.top) / rect.height - 0.5);
+      }}
+      onMouseLeave={() => { mouseX.set(0); mouseY.set(0); }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export default function AboutSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -33,10 +58,10 @@ export default function AboutSection() {
           <h2 className="text-3xl md:text-4xl font-bold mb-2">
             About <span className="gradient-text">Me</span>
           </h2>
-          <div className="w-20 h-1 bg-primary rounded mb-10" />
+          <div className="w-20 h-1 bg-primary rounded mb-8" />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid md:grid-cols-2 gap-10">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -52,17 +77,18 @@ export default function AboutSection() {
               and enjoy pushing boundaries with emerging technologies.
             </p>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4" style={{ perspective: "800px" }}>
               {interests.map((item, i) => (
                 <motion.div
                   key={item.label}
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.4 + i * 0.1 }}
-                  className="glass-card rounded-lg p-4 flex items-center gap-3"
                 >
-                  <item.icon size={20} className="text-primary shrink-0" />
-                  <span className="text-sm text-foreground">{item.label}</span>
+                  <TiltCard className="glass-card rounded-lg p-4 flex items-center gap-3">
+                    <item.icon size={20} className="text-primary shrink-0" style={{ transform: "translateZ(15px)" }} />
+                    <span className="text-sm text-foreground" style={{ transform: "translateZ(10px)" }}>{item.label}</span>
+                  </TiltCard>
                 </motion.div>
               ))}
             </div>
@@ -80,7 +106,7 @@ export default function AboutSection() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
                   transition={{ delay: 0.5 + i * 0.1 }}
-                  className="mb-8 last:mb-0 relative"
+                  className="mb-6 last:mb-0 relative"
                 >
                   <div className="absolute -left-[calc(0.75rem+1.5px)] top-1 w-3 h-3 rounded-full bg-primary" />
                   <span className="text-xs font-mono text-primary">{item.year}</span>

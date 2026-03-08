@@ -17,27 +17,94 @@ serve(async (req) => {
   try {
     const username = "manideep395";
     const token = Deno.env.get("GITHUB_PAT");
-    
-    const headers: Record<string, string> = {
+    const apiKey = Deno.env.get("LOVABLE_API_KEY");
+
+    const ghHeaders: Record<string, string> = {
       "Accept": "application/vnd.github.v3+json",
       "User-Agent": "portfolio-app",
     };
-    if (token) headers["Authorization"] = `Bearer ${token}`;
+    if (token) ghHeaders["Authorization"] = `Bearer ${token}`;
 
-    const reposRes = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`, { headers });
-    
+    // Fetch repos
+    const reposRes = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`, { headers: ghHeaders });
+
     if (!reposRes.ok) {
       console.warn(`GitHub API returned ${reposRes.status}, using fallback`);
       return new Response(JSON.stringify(FALLBACK_DATA), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    
+
     const repos = await reposRes.json();
 
-    const userRes = await fetch(`https://api.github.com/users/${username}`, { headers });
+    // Fetch user profile
+    const userRes = await fetch(`https://api.github.com/users/${username}`, { headers: ghHeaders });
     const user = userRes.ok ? await userRes.json() : null;
 
+    // Fetch READMEs for repos missing descriptions (max 15 to stay within limits)
+    const reposNeedingDesc = repos.filter((r: any) => !r.description).slice(0, 15);
+    const readmeResults: Record<string, string> = {};
+
+    if (reposNeedingDesc.length > 0) {
+      const readmePromises = reposNeedingDesc.map(async (repo: any) => {
+        try {
+          const res = await fetch(`https://api.github.com/repos/${username}/${repo.name}/readme`, {
+            headers: { ...ghHeaders, "Accept": "application/vnd.github.v3.raw" },
+          });
+          if (res.ok) {
+            const text = await res.text();
+            readmeResults[repo.name] = text.slice(0, 600);
+          }
+        } catch { /* skip */ }
+      });
+      await Promise.all(readmePromises);
+    }
+
+    // Use AI to generate descriptions for repos without them
+    const aiDescriptions: Record<string, string> = {};
+    const reposForAI = repos.filter((r: any) => !r.description && (readmeResults[r.name] || r.language));
+
+    if (apiKey && reposForAI.length > 0) {
+      try {
+        const prompt = reposForAI.map((r: any) => {
+          const readme = readmeResults[r.name] || "";
+          return `Repo: "${r.name}" | Language: ${r.language || "unknown"} | README excerpt: "${readme}"`;
+        }).join("\n\n");
+
+        const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "google/gemini-2.5-flash-lite",
+            messages: [
+              {
+                role: "system",
+                content: "Generate a concise one-line project description (max 100 chars) for each GitHub repository based on its name, language, and README content. Return ONLY a JSON object mapping repo names to descriptions. Example: {\"repo-name\": \"A web app for tracking expenses\"}",
+              },
+              { role: "user", content: prompt },
+            ],
+          }),
+        });
+
+        if (aiRes.ok) {
+          const aiData = await aiRes.json();
+          const content = aiData.choices?.[0]?.message?.content || "";
+          // Extract JSON from response
+          const jsonMatch = content.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            const parsed = JSON.parse(jsonMatch[0]);
+            Object.assign(aiDescriptions, parsed);
+          }
+        }
+      } catch (e) {
+        console.warn("AI description generation failed:", e);
+      }
+    }
+
+    // Calculate language stats
     const languageCount: Record<string, number> = {};
     let totalStars = 0;
     for (const repo of repos) {
@@ -55,9 +122,15 @@ serve(async (req) => {
         public_repos: user.public_repos, followers: user.followers, following: user.following,
       } : null,
       repos: repos.map((r: any) => ({
-        name: r.name, description: r.description, language: r.language,
-        stars: r.stargazers_count, forks: r.forks_count, html_url: r.html_url,
-        homepage: r.homepage, updated_at: r.updated_at,
+        name: r.name,
+        description: r.description || aiDescriptions[r.name] || `${r.language || "Code"} project by ${username}`,
+        language: r.language,
+        stars: r.stargazers_count,
+        forks: r.forks_count,
+        html_url: r.html_url,
+        homepage: r.homepage,
+        updated_at: r.updated_at,
+        topics: r.topics || [],
       })),
       stats: { totalRepos: repos.length, totalStars, languages },
     }), {
