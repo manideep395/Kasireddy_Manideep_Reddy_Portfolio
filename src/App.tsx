@@ -7,12 +7,14 @@ import Index from "./pages/Index";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
+import CursorGlow from "./components/CursorGlow";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <CursorGlow />
       <Toaster />
       <Sonner />
       <BrowserRouter>

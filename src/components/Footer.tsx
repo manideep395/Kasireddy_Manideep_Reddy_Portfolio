@@ -1,48 +1,6 @@
 import { Github, Linkedin, Mail, ArrowUp } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-
-function CursorDot() {
-  const dotRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let x = 0, y = 0, dx = 0, dy = 0;
-
-    const onMove = (e: MouseEvent) => {
-      const footer = dotRef.current?.parentElement;
-      if (!footer) return;
-      const rect = footer.getBoundingClientRect();
-      x = e.clientX - rect.left;
-      y = e.clientY - rect.top;
-    };
-
-    const animate = () => {
-      dx += (x - dx) * 0.15;
-      dy += (y - dy) * 0.15;
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${dx}px, ${dy}px)`;
-      }
-      requestAnimationFrame(animate);
-    };
-
-    window.addEventListener("mousemove", onMove);
-    const raf = requestAnimationFrame(animate);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf);
-    };
-  }, []);
-
-  return (
-    <div
-      ref={dotRef}
-      className="pointer-events-none absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 z-10"
-    >
-      <div className="w-5 h-5 rounded-full bg-primary/40 blur-[2px]" />
-      <div className="absolute inset-[6px] rounded-full bg-primary" />
-    </div>
-  );
-}
 
 export default function Footer() {
   const [year] = useState(() => new Date().getFullYear());
@@ -59,7 +17,6 @@ export default function Footer() {
 
   return (
     <footer className="relative overflow-hidden border-t border-border">
-      <CursorDot />
 
       {/* Gradient accent line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
