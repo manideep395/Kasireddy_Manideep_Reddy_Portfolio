@@ -67,22 +67,31 @@ export default function AboutSection() {
           <div className="w-20 h-1 bg-primary rounded mb-8" />
         </motion.div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-10"
+        >
+          <p className="text-muted-foreground leading-relaxed mb-4 max-w-3xl">
+            I'm a <span className="text-foreground font-medium">B.Tech Computer Science student at Vasavi College of Engineering</span> with
+            a deep passion for building intelligent systems and practical software solutions.
+          </p>
+          <p className="text-muted-foreground leading-relaxed max-w-3xl">
+            From AI-driven tools to full-stack applications, I focus on creating technology
+            that improves productivity and solves real problems. I thrive in hackathons
+            and enjoy pushing boundaries with emerging technologies.
+          </p>
+        </motion.div>
+
         <div className="grid md:grid-cols-2 gap-10">
+          {/* Interests */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <p className="text-muted-foreground leading-relaxed mb-6">
-              I'm a <span className="text-foreground font-medium">B.Tech Computer Science student at Vasavi College of Engineering</span> with
-              a deep passion for building intelligent systems and practical software solutions.
-            </p>
-            <p className="text-muted-foreground leading-relaxed mb-8">
-              From AI-driven tools to full-stack applications, I focus on creating technology
-              that improves productivity and solves real problems. I thrive in hackathons
-              and enjoy pushing boundaries with emerging technologies.
-            </p>
-
+            <h3 className="text-lg font-semibold text-foreground mb-4">Interests & Focus</h3>
             <div className="grid grid-cols-2 gap-4" style={{ perspective: "800px" }}>
               {interests.map((item, i) => (
                 <motion.div
@@ -100,11 +109,13 @@ export default function AboutSection() {
             </div>
           </motion.div>
 
+          {/* Timeline */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
+            <h3 className="text-lg font-semibold text-foreground mb-4">Journey</h3>
             <div className="relative pl-6 border-l border-border">
               {staticTimeline[0] && (
                 <motion.div initial={{ opacity: 0, x: 20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.5 }} className="mb-6 relative">
@@ -120,6 +131,9 @@ export default function AboutSection() {
                   <span className="text-xs font-mono text-primary">{exp.duration}</span>
                   <p className="text-foreground text-sm mt-1 font-medium">{exp.role}</p>
                   <p className="text-muted-foreground text-xs">{exp.company}</p>
+                  {exp.description && (
+                    <p className="text-muted-foreground text-xs mt-1 leading-relaxed">{exp.description}</p>
+                  )}
                 </motion.div>
               ))}
               {staticTimeline[1] && (
