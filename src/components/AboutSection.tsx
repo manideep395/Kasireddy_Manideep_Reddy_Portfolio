@@ -5,7 +5,10 @@ import { Brain, Code, Database, Lightbulb } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 
-type Experience = Tables<"experiences">;
+const staticTimeline = [
+  { year: "2021", title: "Started B.Tech at Vasavi College of Engineering", subtitle: "Vasavi College of Engineering" },
+  { year: "2024", title: "Built AI-Powered Projects & Hackathon Participation", subtitle: "Personal Projects" },
+];
 
 const interests = [
   { icon: Brain, label: "Artificial Intelligence" },
