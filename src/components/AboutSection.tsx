@@ -1,14 +1,11 @@
+import { useEffect, useState, useRef } from "react";
 import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
 import { Brain, Code, Database, Lightbulb } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import type { Tables } from "@/integrations/supabase/types";
 
-const timeline = [
-  { year: "2021", title: "Started B.Tech at Vasavi College of Engineering", type: "education" },
-  { year: "2023", title: "Python Developer Intern at Codec Technologies", type: "work" },
-  { year: "2023", title: "Java Developer Intern at Codec Technologies", type: "work" },
-  { year: "2024", title: "Built AI-Powered Projects & Hackathon Participation", type: "project" },
-];
+type Experience = Tables<"experiences">;
 
 const interests = [
   { icon: Brain, label: "Artificial Intelligence" },
