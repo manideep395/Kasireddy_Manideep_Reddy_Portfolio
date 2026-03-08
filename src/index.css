@@ -175,14 +175,14 @@
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: hsl(220 20% 4%);
+  background: hsl(var(--background));
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(175 80% 50% / 0.3);
+  background: hsl(var(--primary) / 0.3);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(175 80% 50% / 0.5);
+  background: hsl(var(--primary) / 0.5);
 }
 
 /* Floating card animation */
