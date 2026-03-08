@@ -83,9 +83,9 @@ function FloatingCodeBrackets({ position, color }: { position: [number, number, 
 
   return (
     <group ref={groupRef} position={position}>
-      <Line points={[[-0.7, 0.45, 0], [-1, 0, 0], [-0.7, -0.45, 0]]} color={color} lineWidth={2} transparent opacity={0.8} />
-      <Line points={[[0.7, 0.45, 0], [1, 0, 0], [0.7, -0.45, 0]]} color={color} lineWidth={2} transparent opacity={0.8} />
-      <Line points={[[-0.12, -0.55, 0], [0.12, 0.55, 0]]} color={color} lineWidth={2} transparent opacity={0.55} />
+      <Line points={[[-0.6, 0.4, 0], [-0.85, 0, 0], [-0.6, -0.4, 0]]} color={color} lineWidth={1.5} transparent opacity={0.45} />
+      <Line points={[[0.6, 0.4, 0], [0.85, 0, 0], [0.6, -0.4, 0]]} color={color} lineWidth={1.5} transparent opacity={0.45} />
+      <Line points={[[-0.1, -0.45, 0], [0.1, 0.45, 0]]} color={color} lineWidth={1.5} transparent opacity={0.3} />
     </group>
   );
 }
