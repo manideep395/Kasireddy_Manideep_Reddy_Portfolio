@@ -184,3 +184,25 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(175 80% 50% / 0.5);
 }
+
+/* Floating card animation */
+@keyframes card-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-card-float {
+  animation: card-float 4s ease-in-out infinite;
+}
+
+.animate-card-float:nth-child(2n) {
+  animation-delay: 0.5s;
+}
+
+.animate-card-float:nth-child(3n) {
+  animation-delay: 1s;
+}
+
+.animate-card-float:nth-child(4n) {
+  animation-delay: 1.5s;
+}
