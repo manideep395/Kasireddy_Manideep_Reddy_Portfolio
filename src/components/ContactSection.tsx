@@ -21,6 +21,14 @@ export default function ContactSection() {
     if (error) {
       toast.error("Failed to send message. Please try again.");
     } else {
+      // Send email notification
+      supabase.functions.invoke("send-contact-email", {
+        body: {
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          message: formData.message.trim(),
+        },
+      });
       toast.success("Message sent successfully!");
       setFormData({ name: "", email: "", message: "" });
     }
