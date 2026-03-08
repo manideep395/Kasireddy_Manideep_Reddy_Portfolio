@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, Github, Mail, FileText } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import profilePhoto from "@/assets/profile-photo.png";
 
 const roles = ["AI Developer", "Full Stack Developer", "Data Analyst", "Hackathon Builder"];
@@ -9,6 +10,13 @@ export default function HeroSection() {
   const [roleIndex, setRoleIndex] = useState(0);
   const [text, setText] = useState("");
   const [deleting, setDeleting] = useState(false);
+  const [resumeUrl, setResumeUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.from("site_settings").select("value").eq("key", "resume_url").single().then(({ data }) => {
+      if (data?.value) setResumeUrl(data.value);
+    });
+  }, []);
 
   useEffect(() => {
     const currentRole = roles[roleIndex];
@@ -30,7 +38,6 @@ export default function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center section-padding">
       <div className="max-w-6xl mx-auto z-10 flex flex-col md:flex-row items-center gap-10 md:gap-16">
-        {/* Left: Text content */}
         <motion.div
           initial={{ opacity: 0, x: -40 }}
           animate={{ opacity: 1, x: 0 }}
@@ -59,10 +66,12 @@ export default function HeroSection() {
             <a href="#projects" className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">
               View Projects
             </a>
-            <a href="https://drive.google.com/uc?export=download&id=1zAgpoC17EI6hJm1Dw-Fi5eTNFo_IbWo4" target="_blank" rel="noopener noreferrer"
-              className="px-6 py-3 rounded-lg glass text-foreground font-semibold hover:border-primary/50 transition-colors flex items-center gap-2">
-              <FileText size={18} /> Download Resume
-            </a>
+            {resumeUrl && (
+              <a href={resumeUrl} target="_blank" rel="noopener noreferrer"
+                className="px-6 py-3 rounded-lg glass text-foreground font-semibold hover:border-primary/50 transition-colors flex items-center gap-2">
+                <FileText size={18} /> Download Resume
+              </a>
+            )}
             <a href="https://github.com/manideep395" target="_blank" rel="noopener noreferrer"
               className="px-6 py-3 rounded-lg glass text-foreground font-semibold hover:border-primary/50 transition-colors flex items-center gap-2">
               <Github size={18} /> GitHub
@@ -73,7 +82,6 @@ export default function HeroSection() {
           </div>
         </motion.div>
 
-        {/* Right: Profile photo with 3D effects */}
         <motion.div
           initial={{ opacity: 0, x: 40, rotateY: -15 }}
           animate={{ opacity: 1, x: 0, rotateY: 0 }}
@@ -82,28 +90,17 @@ export default function HeroSection() {
           style={{ perspective: "800px" }}
         >
           <div className="relative w-56 h-56 md:w-72 md:h-72 lg:w-80 lg:h-80">
-            {/* Glow ring */}
             <div className="absolute inset-0 rounded-full opacity-50 blur-xl"
               style={{ background: "linear-gradient(135deg, hsl(175 80% 50% / 0.4), hsl(260 60% 60% / 0.4))" }} />
-            {/* Photo */}
-            <img
-              src={profilePhoto}
-              alt="Kasireddy Manideep Reddy"
-              className="relative w-full h-full rounded-full object-cover border-2 border-primary/30 shadow-2xl"
-            />
-            {/* Decorative ring */}
+            <img src={profilePhoto} alt="Kasireddy Manideep Reddy"
+              className="relative w-full h-full rounded-full object-cover border-2 border-primary/30 shadow-2xl" />
             <div className="absolute -inset-3 rounded-full border border-primary/20 animate-spin" style={{ animationDuration: "20s" }} />
             <div className="absolute -inset-6 rounded-full border border-secondary/10 animate-spin" style={{ animationDuration: "30s", animationDirection: "reverse" }} />
           </div>
         </motion.div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
-      >
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="absolute bottom-10 left-1/2 -translate-x-1/2">
         <a href="#about" className="inline-block animate-float">
           <ArrowDown size={24} className="text-primary" />
         </a>

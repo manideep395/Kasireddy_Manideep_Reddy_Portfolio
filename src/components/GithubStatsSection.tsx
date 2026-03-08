@@ -20,7 +20,7 @@ export default function GithubStatsSection() {
     });
   }, []);
 
-  if (!data) return null;
+  if (!data) return <div className="h-0" />;
 
   const stats = [
     { icon: BookOpen, label: "Repositories", value: data.stats.totalRepos },
