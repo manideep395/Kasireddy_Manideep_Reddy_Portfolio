@@ -18,17 +18,19 @@ const Index = () => {
       <Suspense fallback={null}>
         <ParticleField />
       </Suspense>
-      <Navigation />
-      <HeroSection />
-      <AboutSection />
-      <SkillsSection />
-      <ProjectsSection />
-      <GithubStatsSection />
-      <ExperienceSection />
-      <BlogSection />
-      <ContactSection />
-      <Footer />
-      <AIChatbot />
+      <div className="relative z-10">
+        <Navigation />
+        <HeroSection />
+        <AboutSection />
+        <SkillsSection />
+        <ProjectsSection />
+        <GithubStatsSection />
+        <ExperienceSection />
+        <BlogSection />
+        <ContactSection />
+        <Footer />
+        <AIChatbot />
+      </div>
     </div>
   );
 };
