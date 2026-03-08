@@ -1,14 +1,11 @@
+import { useEffect, useState, useRef } from "react";
 import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
 import { Brain, Code, Database, Lightbulb } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import type { Tables } from "@/integrations/supabase/types";
 
-const timeline = [
-  { year: "2021", title: "Started B.Tech at Vasavi College of Engineering", type: "education" },
-  { year: "2023", title: "Python Developer Intern at Codec Technologies", type: "work" },
-  { year: "2023", title: "Java Developer Intern at Codec Technologies", type: "work" },
-  { year: "2024", title: "Built AI-Powered Projects & Hackathon Participation", type: "project" },
-];
+type Experience = Tables<"experiences">;
 
 const interests = [
   { icon: Brain, label: "Artificial Intelligence" },
@@ -45,6 +42,13 @@ function TiltCard({ children, className }: { children: React.ReactNode; classNam
 export default function AboutSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+
+  useEffect(() => {
+    supabase.from("experiences").select("*").order("display_order").then(({ data }) => {
+      if (data) setExperiences(data);
+    });
+  }, []);
 
   return (
     <section id="about" className="section-padding" ref={ref}>
@@ -99,17 +103,18 @@ export default function AboutSection() {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <div className="relative pl-6 border-l border-border">
-              {timeline.map((item, i) => (
+              {experiences.map((exp, i) => (
                 <motion.div
-                  key={i}
+                  key={exp.id}
                   initial={{ opacity: 0, x: 20 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
                   transition={{ delay: 0.5 + i * 0.1 }}
                   className="mb-6 last:mb-0 relative"
                 >
                   <div className="absolute -left-[calc(0.75rem+1.5px)] top-1 w-3 h-3 rounded-full bg-primary" />
-                  <span className="text-xs font-mono text-primary">{item.year}</span>
-                  <p className="text-foreground text-sm mt-1">{item.title}</p>
+                  <span className="text-xs font-mono text-primary">{exp.duration}</span>
+                  <p className="text-foreground text-sm mt-1 font-medium">{exp.role}</p>
+                  <p className="text-muted-foreground text-xs">{exp.company}</p>
                 </motion.div>
               ))}
             </div>
