@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 
 const staticTimeline = [
-  { year: "2021", title: "Started B.Tech at Vasavi College of Engineering", subtitle: "Vasavi College of Engineering" },
+  { year: "2023", title: "Started B.Tech at Vasavi College of Engineering", subtitle: "Vasavi College of Engineering" },
   { year: "2024", title: "Built AI-Powered Projects & Hackathon Participation", subtitle: "Personal Projects" },
 ];
 
